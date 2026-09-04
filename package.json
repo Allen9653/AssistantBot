@@ -1,0 +1,25 @@
+{
+  "name": "assistantbot",
+  "version": "1.0.0",
+  "description": "Usluzni bot predlozak, kreiraj sa ciljem da vodi korisnika kroz proces odabira usluge/termina/potvrda podataka. Sa prilagodjenim tonom/dijalektom i visekanalnom pristupacnoscu.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Allen9653/AssistantBot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Allen9653/AssistantBot/issues"
+  },
+  "homepage": "https://github.com/Allen9653/AssistantBot#readme",
+  "dependencies": {
+    "express": "^5.2.1"
+  }
+}
