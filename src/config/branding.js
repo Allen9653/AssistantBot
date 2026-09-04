@@ -1,6 +1,6 @@
 const officialBranding = Object.freeze({
   name: 'AssistantBot',
-  logo: '/assets/assistantbot-logo.png'
+  logo: '/assets/AssistantBot_logo.png'
 });
 
 function canCustomizeBranding(subscription) {

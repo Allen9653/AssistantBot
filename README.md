@@ -15,8 +15,8 @@ Tekstualni engine u `src/utils/textEngine.js` prepoznaje ćirilicu, pravilno tra
 
 ## Branding
 
-Službeni identitet je `AssistantBot`, a logo se servira sa `/assets/assistantbot-logo.png`.
-Fajl treba biti smješten u `public/assets/assistantbot-logo.png`.
+Službeni identitet je `AssistantBot`, a logo se servira sa `/assets/AssistantBot_logo.png`.
+Fajl je smješten u `public/assets/AssistantBot_logo.png`.
 Promjena imena ili logotipa dozvoljena je samo kada provjereni subscription sadrži `paidMonths >= 6`; podatak mora doći iz autentifikovanog payment sistema, ne iz javnog webhook payload-a.
 **AssistantBot** je zvanični uslužni bot predložak u vlasništvu kompanije **B&H Assistant d.o.o. Zenica**. Kreiran je sa primarnim ciljem da vođenjem kroz proces vodi korisnika kroz odabir usluge, definisanje termina i potvrdu podataka. Prilagođen specifičnim govornim tonovima, dijalektima i višekanalnoj pristupačnosti, bot služi kao napredno rješenje za digitalizaciju poslovanja.
 
