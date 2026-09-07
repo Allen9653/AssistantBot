@@ -1,25 +1,37 @@
 {
-  "name": "assistantbot",
+  "name": "bh-assistant-app",
+  "private": true,
   "version": "1.0.0",
-  "description": "Usluzni bot predlozak, kreiraj sa ciljem da vodi korisnika kroz proces odabira usluge/termina/potvrda podataka. Sa prilagodjenim tonom/dijalektom i visekanalnom pristupacnoscu.",
-  "main": "server.js",
+  "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "dev": "vite --port=3000 --host=0.0.0.0",
+    "build": "vite build",
+    "preview": "vite preview",
+    "clean": "rm -rf dist server.js",
+    "lint": "tsc --noEmit"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Allen9653/AssistantBot.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/Allen9653/AssistantBot/issues"
-  },
-  "homepage": "https://github.com/Allen9653/AssistantBot#readme",
   "dependencies": {
-    "express": "^5.2.1"
+    "@google/genai": "^2.4.0",
+    "@radix-ui/react-select": "^2.3.7",
+    "@tailwindcss/vite": "^4.1.14",
+    "@vitejs/plugin-react": "^5.0.4",
+    "dotenv": "^17.2.3",
+    "express": "^4.21.2",
+    "lucide-react": "^0.546.0",
+    "motion": "^12.23.24",
+    "next-themes": "^0.4.6",
+    "react": "^19.0.1",
+    "react-dom": "^19.0.1",
+    "react-router-dom": "^7.18.2"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.21",
+    "@types/node": "^22.14.0",
+    "autoprefixer": "^10.4.21",
+    "esbuild": "^0.25.0",
+    "tailwindcss": "^4.1.14",
+    "tsx": "^4.21.0",
+    "typescript": "~5.8.2",
+    "vite": "^6.2.3"
   }
 }

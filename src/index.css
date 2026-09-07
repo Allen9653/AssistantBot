@@ -1,0 +1,165 @@
+@import "tailwindcss";
+
+:root {
+  --brand-navy: #0A1628;
+  --brand-navy-card: #0F2038;
+  --brand-navy-border: #1A3152;
+  --brand-teal: #00C9A7;
+  --brand-blue: #0088FF;
+  --brand-gold: #C9A84C;
+  --brand-light: #F5F0E8;
+  --brand-footer: #081120;
+  --brand-card: #0F2038;
+  --brand-border: #1A3152;
+  --brand-text: #F5F0E8;
+  --brand-text-muted: #A0AEC0;
+}
+
+.dark {
+  --brand-navy: #060E1A;
+  --brand-navy-card: #0A1628;
+  --brand-navy-border: #15263F;
+  --brand-teal: #00E5BE;
+  --brand-blue: #38BDF8;
+  --brand-gold: #E5C365;
+  --brand-light: #FAF7F2;
+  --brand-footer: #040912;
+  --brand-card: #0D1B30;
+  --brand-border: #1B2F4E;
+  --brand-text: #FAF7F2;
+  --brand-text-muted: #94A3B8;
+}
+
+@theme {
+  --font-syne: 'Syne', sans-serif;
+  --font-sans: 'Inter', sans-serif;
+  --color-navy: var(--brand-navy);
+  --color-navy-card: var(--brand-card);
+  --color-navy-border: var(--brand-border);
+  --color-teal: var(--brand-teal);
+  --color-cream: var(--brand-light);
+  --color-gold: var(--brand-gold);
+}
+
+html, body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100%;
+  overscroll-behavior: none;
+  overscroll-behavior-y: none;
+}
+
+body {
+  min-height: 100vh;
+  font-family: 'Inter', sans-serif;
+}
+
+/* Safe Area Inset Support */
+.safe-top {
+  padding-top: max(12px, env(safe-area-inset-top));
+}
+
+.safe-bottom {
+  padding-bottom: max(16px, env(safe-area-inset-bottom));
+}
+
+/* Text Selection Rules: Interactive controls non-selectable, content selectable */
+button, 
+a, 
+[role='button'], 
+nav, 
+.agent-selector,
+.no-select {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.selectable-content {
+  -webkit-user-select: text;
+  user-select: text;
+}
+
+/* Mobile Touch Target Standards */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+.font-syne {
+  font-family: 'Syne', sans-serif;
+}
+
+.font-inter {
+  font-family: 'Inter', sans-serif;
+}
+
+/* Custom Stećak Animated Motif Styles */
+@keyframes stecakPulse {
+  0%, 100% {
+    opacity: 0.25;
+    transform: scale(1) rotate(0deg);
+  }
+  50% {
+    opacity: 0.55;
+    transform: scale(1.03) rotate(0.5deg);
+  }
+}
+
+@keyframes floatSlow {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-8px);
+  }
+}
+
+@keyframes glowShift {
+  0%, 100% {
+    filter: drop-shadow(0 0 15px rgba(0, 201, 167, 0.3));
+  }
+  50% {
+    filter: drop-shadow(0 0 25px rgba(201, 168, 76, 0.4));
+  }
+}
+
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.animate-shimmer {
+  animation: shimmer 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.animate-stecak-pulse {
+  animation: stecakPulse 8s ease-in-out infinite;
+}
+
+.animate-float-slow {
+  animation: floatSlow 6s ease-in-out infinite;
+}
+
+.animate-glow-shift {
+  animation: glowShift 5s ease-in-out infinite;
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--brand-navy);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--brand-border);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--brand-teal);
+}
