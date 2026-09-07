@@ -1,5 +1,13 @@
 import { FormEvent, useEffect, useRef, useState } from 'react';
-import { Check, CircleHelp, Heart, Paperclip, Send, User } from 'lucide-react';
+import { Check, CircleHelp, Heart, Send, Settings, User } from 'lucide-react';
+import { SettingsModal } from './components/SettingsModal';
+import {
+  BusinessSettings,
+  buildSystemPrompt,
+  createConfiguredReply,
+  loadBusinessSettings,
+  saveBusinessSettings,
+} from './utils/aiContext';
 
 interface Message {
   id: number;
@@ -8,22 +16,14 @@ interface Message {
   time: string;
 }
 
-const initialMessages: Message[] = [
-  {
-    id: 1,
-    content: 'Pozdrav! Kako vam mogu pomoći danas?',
-    sender: 'bot',
-    time: 'Upravo sada',
-  },
-  {
-    id: 2,
-    content: 'Mogu vam pomoći da saznate više o našim uslugama, kao što su BH Konver i Papir Finder.',
-    sender: 'bot',
-    time: 'Upravo sada',
-  },
-];
-
 const suggestions = ['Šta je BH Konver?', 'Kako radi Papir Finder?', 'Želim kontaktirati tim'];
+
+function createWelcomeMessages(settings: BusinessSettings): Message[] {
+  return [
+    { id: 1, content: settings.customGreeting, sender: 'bot', time: 'Upravo sada' },
+    { id: 2, content: `Mogu vam pomoći sa informacijama o poslovanju ${settings.businessName}, uslugama, cijenama, radnom vremenu i kontaktu.`, sender: 'bot', time: 'Upravo sada' },
+  ];
+}
 
 function GummiAvatar({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
   const sizeClasses = {
@@ -44,8 +44,10 @@ function GummiAvatar({ size = 'md' }: { size?: 'sm' | 'md' | 'lg' }) {
 }
 
 export default function App() {
-  const [messages, setMessages] = useState<Message[]>(initialMessages);
+  const [settings, setSettings] = useState<BusinessSettings>(() => loadBusinessSettings());
+  const [messages, setMessages] = useState<Message[]>(() => createWelcomeMessages(loadBusinessSettings()));
   const [input, setInput] = useState('');
+  const [isSettingsOpen, setIsSettingsOpen] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   // Keep the latest conversation visible whenever a message is added.
@@ -65,13 +67,16 @@ export default function App() {
     ]);
     setInput('');
 
-    // Provide a clear next step until the assistant is connected to its live API.
+    // Build the runtime prompt from the latest owner configuration before answering.
+    const runtimeSystemPrompt = buildSystemPrompt(settings);
+    const configuredReply = createConfiguredReply(trimmedInput, settings);
+    void runtimeSystemPrompt;
     window.setTimeout(() => {
       setMessages((currentMessages) => [
         ...currentMessages,
         {
           id: messageId + 1,
-          content: 'Hvala na poruci! Naš tim će vam uskoro pomoći. Možete me pitati o BH Konveru, Papir Finderu ili našim drugim uslugama.',
+          content: configuredReply,
           sender: 'bot',
           time: 'Upravo sada',
         },
@@ -81,6 +86,16 @@ export default function App() {
 
   const useSuggestion = (suggestion: string) => {
     setInput(suggestion);
+  };
+
+  const handleSettingsSave = (nextSettings: BusinessSettings) => {
+    saveBusinessSettings(nextSettings);
+    setSettings(nextSettings);
+    setIsSettingsOpen(false);
+    setMessages((currentMessages) => [
+      ...currentMessages,
+      { id: Date.now(), content: `Podešavanja za ${nextSettings.businessName} su sačuvana. AssistantBot sada koristi nove podatke u razgovoru.`, sender: 'bot', time: 'Upravo sada' },
+    ]);
   };
 
   return (
@@ -96,15 +111,20 @@ export default function App() {
                 <span className="hidden h-1 w-1 rounded-full bg-[#00c9a7] sm:block" />
                 <span className="hidden text-[10px] font-bold uppercase tracking-[0.16em] text-[#a0aec0] sm:block">B&amp;H Assistant</span>
               </div>
-              <p className="text-xs text-[#a0aec0]">Digitalni asistent za građane i poslovanje</p>
+              <p className="text-xs text-[#a0aec0]">{settings.businessName} · digitalni asistent</p>
             </div>
           </div>
-          <div className="flex items-center gap-2 rounded-full border border-[#24506a] bg-[#0f2038] px-3 py-1.5 text-xs font-bold text-[#7de6d2]">
+          <div className="flex items-center gap-2">
+            <button type="button" onClick={() => setIsSettingsOpen(true)} className="flex items-center gap-2 rounded-lg border border-[#24506a] bg-[#0f2038] px-3 py-2 text-xs font-bold text-[#a0aec0] transition hover:border-[#00c9a7] hover:text-[#7de6d2]" aria-label="Otvori podešavanja poslovanja">
+              <Settings size={15} /> <span className="hidden sm:inline">Podešavanja</span>
+            </button>
+            <div className="flex items-center gap-2 rounded-full border border-[#24506a] bg-[#0f2038] px-3 py-1.5 text-xs font-bold text-[#7de6d2]">
             <span className="relative flex h-2 w-2">
               <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-emerald-400 opacity-60" />
               <span className="relative inline-flex h-2 w-2 rounded-full bg-emerald-500" />
             </span>
             Tu sam
+            </div>
           </div>
         </div>
       </header>
@@ -122,7 +142,7 @@ export default function App() {
                   <span className="rounded-sm border border-[#c9a84c]/70 px-2.5 py-1 text-[10px] font-extrabold uppercase tracking-[0.12em] text-[#e5c365]">Bosna i Hercegovina</span>
                 </div>
                 <h2 className="text-xl font-extrabold tracking-tight sm:text-2xl">AssistantBot - Vaš pametni digitalni vodič</h2>
-                <p className="mt-1 text-sm leading-5 text-[#a0aec0]">Brz i jasan pristup informacijama o B&amp;H Assistant ekosistemu.</p>
+                <p className="mt-1 text-sm leading-5 text-[#a0aec0]">Brz i jasan pristup informacijama o {settings.businessName}.</p>
               </div>
             </div>
           </div>
@@ -172,9 +192,6 @@ export default function App() {
             ))}
           </div>
           <form onSubmit={sendMessage} className="flex items-center gap-2 rounded-xl border border-[#c9a84c]/70 bg-white p-2 shadow-[0_5px_18px_rgba(8,17,32,0.08)] focus-within:border-[#00c9a7] focus-within:ring-4 focus-within:ring-[#dcefe9]">
-            <button type="button" aria-label="Dodaj prilog" className="hidden h-11 w-11 shrink-0 items-center justify-center rounded-lg text-[#a0aec0] transition hover:bg-[#f5f0e8] hover:text-[#007d70] sm:flex">
-              <Paperclip size={19} />
-            </button>
             <input
               value={input}
               onChange={(event) => setInput(event.target.value)}
@@ -189,6 +206,7 @@ export default function App() {
           <p className="mt-2 flex items-center justify-center gap-1 text-[11px] text-[#8994a3]"><Heart size={11} className="text-[#00aF98]" /> AssistantBot može napraviti grešku. Provjerite važne informacije.</p>
         </div>
       </footer>
+      {isSettingsOpen && <SettingsModal settings={settings} onClose={() => setIsSettingsOpen(false)} onSave={handleSettingsSave} />}
     </main>
   );
 }
