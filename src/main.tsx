@@ -1,3 +1,4 @@
+import { BH_PAPIRFINDER_SYSTEM_PROMPT } from './config/papirfinderPrompt';
 import React, { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import App from './App.tsx';
